@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
 import Categories from './pages/Categories'
+import Products from './pages/Products'
 function App() { //parent component
   return(
    <BrowserRouter>
@@ -16,6 +17,7 @@ function App() { //parent component
           <Route path="/Profile" element={<Profile />}/>
           <Route path="/Settings" element={<Settings/>}/>
           <Route path="/Categories" element={<Categories/>}/>
+          <Route path='/Products' element={<Products/>}/>
         </Routes>
    </BrowserRouter>
   )

@@ -1,5 +1,5 @@
 interface CategoryType{
     id:number;
-    name:String;
+    name:string;
 }
 export default CategoryType;

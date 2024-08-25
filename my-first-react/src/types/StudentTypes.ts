@@ -1,5 +1,5 @@
 interface StudentTypes{
-    name:String;
+    name:string;
     age:number;
 }
 export default StudentTypes;
