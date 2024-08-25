@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,7 @@ import com.ijse.hello.entity.Category;
 import com.ijse.hello.entity.ProductEntity;
 import com.ijse.hello.service.CategoryService;
 import com.ijse.hello.service.ProductService;
-
+@CrossOrigin(origins = "*")
 @RestController
 public class ProductController {
     @Autowired
