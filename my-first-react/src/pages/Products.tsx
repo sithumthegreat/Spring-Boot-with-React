@@ -10,6 +10,8 @@ function Products(){
     const[price,setPrice]=useState<number>(0.0);
     const[categoryId,setCategoryId]=useState<number>();
     const [categories,setCategories]=useState<CategoryType[]>([]);
+    const[editMode,setEditMode]=useState<boolean>(false);
+    const[editProductId,setEditProductId]=useState<number| null>(null) //need documentation
 
     function handelProductName(event:any){
         setProductName(event.target.value);
@@ -40,8 +42,14 @@ function Products(){
         setCategories(apiResponse.data);
 
     }
-    async function addProduct(){
-        //continue from here
+
+    function handelEdit(product:ProductType){
+        setProductName(product.name);
+        setProductDesc(product.description);
+        setPrice(product.price);
+        setCategoryId(product.category?.id);
+        setEditProductId(product.id);
+        setEditMode(true);
     }
     async function handelSubmit(){
        const data={
@@ -51,8 +59,21 @@ function Products(){
         categoryId:categoryId
        }
        try {
-        await axios.post("http://localhost:8081/product",data);
+        if(editMode && editProductId!==null){
+            await axios.put(`http://localhost:8081/product/${editProductId}`, data);
+            setEditMode(false);
+            setEditProductId(null);
+
+        }else{
+            await axios.post("http://localhost:8081/product",data);
+        }
+        
         loadProducts();
+        setProductName("");
+        setProductDesc("");
+        setPrice(0.0);
+        setCategoryId(undefined);//need to know why
+
         
        } catch (error:any) {
             console.log(error);
@@ -74,6 +95,7 @@ function Products(){
            <tr className="bg-slate-200">
             <th className="p-2 w-[50px] text-left" >#</th>
             <th className="p-2 w-[200px] text-left">Product Name</th>
+            <th className="p-2 w-[200px] text-left">Desciption</th>
             <th className="p-2 w-[100px] text-left">Product Price</th>
             <th className="p-2 w-[200px] text-left">Category</th>
             <th className="p-2 w-[200px] text-left">Action</th>
@@ -85,9 +107,10 @@ function Products(){
                         <tr>
                             <td className="p-2 text-slate-600 border-b border-slate-200">{product.id}</td>
                             <td className="p-2 text-slate-600 border-b border-slate-200">{product.name}</td>
+                            <td className="p-2 text-slate-600 border-b border-slate-200">{product.description}</td>
                             <td className="p-2 text-slate-600 border-b border-slate-200">{product.price}</td>
                             { <td className="p-2 text-slate-600 border-b border-slate-200">{product.category?.name}</td> }
-                            <td className="text-sm text-bermuda"><button type="button" className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm" >EDIT</button></td>
+                            <td className="text-sm text-bermuda"><button type="button" className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm"  onClick={()=>handelEdit(product)}>EDIT</button></td>
 
                         </tr>
                     )
