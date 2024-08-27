@@ -61,6 +61,7 @@ function Products(){
        try {
         if(editMode && editProductId!==null){
             await axios.put(`http://localhost:8081/product/${editProductId}`, data);
+            window.location.reload;
             setEditMode(false);
             setEditProductId(null);
 
