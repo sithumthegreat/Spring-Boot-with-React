@@ -68,14 +68,29 @@ public class ProductController {
     }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<ProductEntity> updateProduct(@PathVariable Long id,@RequestBody ProductEntity entity){
-        ProductEntity productEntity=service.updateProduct(id,entity);
-
-        if (entity==null){
-            return ResponseEntity.status(404).body(null);
-        }else{
-            return ResponseEntity.status(200).body(entity);
+    public ResponseEntity<ProductEntity> updateProduct(@PathVariable Long id,@RequestBody ProductReqDto entity){
+        //ProductEntity productEntity=service.updateProduct(id,entity);
+        try {
+            ProductEntity productEntity=new ProductEntity();
+            productEntity.setName(entity.getName());
+            productEntity.setDescription(entity.getDescription());
+            productEntity.setPrice(entity.getPrice());
+            Category category=categoryService.getCategoryById(entity.getCategoryId());
+            if(category!=null){
+                productEntity.setCategory(category);
+                ProductEntity updatedProduct=service.updateProduct(id, productEntity);
+                return ResponseEntity.status(200).body(updatedProduct);
+            }else{
+                return ResponseEntity.status(400).body(null);
+            }
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(null);
+    
+        
         }
+
+        
     }
 
     @DeleteMapping("/product/{id}")

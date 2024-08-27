@@ -39,10 +39,11 @@ public class ProductServiceImpl implements ProductService{
        if (existingProduct==null){
         return null;
        }else{
-        existingProduct.setDescription(entity.getDescription());
-        existingProduct.setName(entity.getName());
-        existingProduct.setPrice(entity.getPrice());
-        return repository.save(existingProduct);
+            existingProduct.setDescription(entity.getDescription());
+            existingProduct.setName(entity.getName());
+            existingProduct.setPrice(entity.getPrice());
+            existingProduct.setCategory(entity.getCategory());
+            return repository.save(existingProduct);
 
        }
     }
