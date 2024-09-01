@@ -9,6 +9,8 @@ import Profile from './pages/Profile'
 import Settings from './pages/Settings'
 import Categories from './pages/Categories'
 import Products from './pages/Products'
+import Orders from './pages/Orders'
+import CreateOrder from './pages/CreateOrder'
 function App() { //parent component
   return(
    <BrowserRouter>
@@ -18,7 +20,12 @@ function App() { //parent component
           <Route path="/Settings" element={<Settings/>}/>
           <Route path="/Categories" element={<Categories/>}/>
           <Route path='/Products' element={<Products/>}/>
-        </Routes>
+          <Route path='/Orders' element={<Orders/>}/>
+          <Route path='/Orders/Create' element={<CreateOrder/>}/>
+
+          
+          </Routes>
+
    </BrowserRouter>
   )
 

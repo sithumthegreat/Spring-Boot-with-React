@@ -12,6 +12,7 @@ function Products(){
     const [categories,setCategories]=useState<CategoryType[]>([]);
     const[editMode,setEditMode]=useState<boolean>(false);
     const[editProductId,setEditProductId]=useState<number| null>(null) //need documentation
+    const[deleteMode,setDeletMode]=useState<boolean>(false);
 
     function handelProductName(event:any){
         setProductName(event.target.value);
@@ -31,6 +32,7 @@ function Products(){
         setProducts(apiResponse.data);
 
     }
+  
     useEffect(function(){
         loadProducts();
         loadCategories();
@@ -51,6 +53,16 @@ function Products(){
         setEditProductId(product.id);
         setEditMode(true);
     }
+    function handelDelete(product:ProductType){
+        setProductName(product.name);
+        setProductDesc(product.description);
+        setPrice(product.price);
+        setCategoryId(product.category?.id);
+        setEditProductId(product.id);
+        setDeletMode(true);
+        
+
+    }
     async function handelSubmit(){
        const data={
         name:productName,
@@ -59,13 +71,21 @@ function Products(){
         categoryId:categoryId
        }
        try {
+        
         if(editMode && editProductId!==null){
             await axios.put(`http://localhost:8081/product/${editProductId}`, data);
             window.location.reload;
             setEditMode(false);
             setEditProductId(null);
 
-        }else{
+        }if(deleteMode){
+            await axios.delete(`http://localhost:8081/product/${editProductId}`);
+            loadProducts();
+            window.location.reload;
+            setDeletMode(false);
+            setEditProductId(null);
+        }
+        else{
             await axios.post("http://localhost:8081/product",data);
         }
         
@@ -111,7 +131,8 @@ function Products(){
                             <td className="p-2 text-slate-600 border-b border-slate-200">{product.description}</td>
                             <td className="p-2 text-slate-600 border-b border-slate-200">{product.price}</td>
                             { <td className="p-2 text-slate-600 border-b border-slate-200">{product.category?.name}</td> }
-                            <td className="text-sm text-bermuda"><button type="button" className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm"  onClick={()=>handelEdit(product)}>EDIT</button></td>
+                            <td className="text-sm text-bermuda"><button type="button" className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm mr-5"  onClick={()=>handelEdit(product)}>EDIT</button>
+                            <button  className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm" onClick={()=>handelDelete(product)}>Delete</button></td>
 
                         </tr>
                     )
@@ -120,6 +141,9 @@ function Products(){
         </table>
         <div className="border border-slate-200 py-3 px-4 rounded-lg max-w-[350px] mt-5">
             <form action="">
+                <div className="text-slate-800 text-xl">
+                    {editMode?'Edit Product':'Add Product'}
+                </div>
                 <div>
                     <label htmlFor="" className="text-slate-600 font-sm block mb-2">Product Name</label>
                     <input type="text" className="text-slate-600 font-sm block mb-3 w-full p-2 border border-slate-200 rounded-lg" value={productName}  onChange={handelProductName} required/>
@@ -137,7 +161,7 @@ function Products(){
 
                 <div>
                     <label htmlFor="" className="text-slate-600 font-sm block mb-3 w-full p-2 border border-slate-300 rounded-lg">Category</label>
-                    <select name="" id="" className="text-slate-600 font-sm block mb-3 w-full p-2 border border-slate-300 rounded-lg" onChange={handelCatID} required>
+                    <select value={categoryId} name="" id="" className="text-slate-600 font-sm block mb-3 w-full p-2 border border-slate-300 rounded-lg" onChange={handelCatID} required>
                         <option value="">Please Select Category</option>
                         {categories.map(function (category){
                             return(
@@ -149,7 +173,7 @@ function Products(){
                     </select>
                 </div>
 
-                <button className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm" onClick={handelSubmit}>SUBMIT</button>
+                <button className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm" onClick={handelSubmit}>{editMode?'UPDATE':'SUBMIT'}</button>
 
             </form>
 
