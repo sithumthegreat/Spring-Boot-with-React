@@ -70,6 +70,7 @@ public class ProductController {
     @PutMapping("/product/{id}")
     public ResponseEntity<ProductEntity> updateProduct(@PathVariable Long id,@RequestBody ProductReqDto entity){
         //ProductEntity productEntity=service.updateProduct(id,entity);
+        //System.out.println("request got");
         try {
             ProductEntity productEntity=new ProductEntity();
             productEntity.setName(entity.getName());
@@ -94,7 +95,9 @@ public class ProductController {
     }
 
     @DeleteMapping("/product/{id}")
+    
     public void delete(@PathVariable Long id){
+        System.out.println(id);
         service.deleteProduct(id);
 
     }

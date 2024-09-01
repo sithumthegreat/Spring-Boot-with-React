@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +17,9 @@ import com.ijse.hello.entity.OrderEntity;
 import com.ijse.hello.entity.ProductEntity;
 import com.ijse.hello.service.OrderService;
 import com.ijse.hello.service.ProductService;
-
+@CrossOrigin(origins = "*")
 @RestController
+
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -28,22 +30,31 @@ public class OrderController {
         try {
             List<Long> productIds=order.getProductIds();
             OrderEntity newOrder=new OrderEntity();
+            newOrder.setTotal_price(0.0);
             List<ProductEntity> orderedProducts=new ArrayList<>();
             productIds.forEach(productId->{
                 ProductEntity product=productService.getProductById(productId);
-
+                System.out.println("for Each Succuess");
                 if (product!=null){
                     orderedProducts.add(product);
                     newOrder.setTotal_price(newOrder.getTotal_price()+product.getPrice());
+                    System.out.println("ProductEntity is got");
+                }else{
+                    System.out.println("Null ProductEntity");
                 }
 
             });
             newOrder.setOrderedProducts(orderedProducts);
             orderService.createOrder(newOrder);
+            System.out.println("before success return");
             return ResponseEntity.status(201).body(newOrder);
+            
+
 
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(null);
+            System.out.println("Exception Coming");
+            return ResponseEntity.badRequest().body(null);
+            
         }
 
     }
