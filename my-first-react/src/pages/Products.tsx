@@ -131,7 +131,7 @@ function Products(){
                             <td className="p-2 text-slate-600 border-b border-slate-200">{product.description}</td>
                             <td className="p-2 text-slate-600 border-b border-slate-200">{product.price}</td>
                             { <td className="p-2 text-slate-600 border-b border-slate-200">{product.category?.name}</td> }
-                            <td className="text-sm text-bermuda"><button type="button" className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm mr-5"  onClick={()=>handelEdit(product)}>EDIT</button>
+                            <td className="p-2 border-b border-slate-200"><button type="button" className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm mr-5"  onClick={()=>handelEdit(product)}>EDIT</button>
                             <button  className="py-3 px-4 bg-slate-800 text-white rounded-lg hover:bg-slate-950 mb-2 text-sm" onClick={()=>handelDelete(product)}>Delete</button></td>
 
                         </tr>

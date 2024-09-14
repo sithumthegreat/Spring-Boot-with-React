@@ -21,9 +21,7 @@ function App() { //parent component
           <Route path="/Categories" element={<Categories/>}/>
           <Route path='/Products' element={<Products/>}/>
           <Route path='/Orders' element={<Orders/>}/>
-          <Route path='/Orders/Create' element={<CreateOrder/>}/>
-
-          
+          <Route path='/OrdersCreate' element={<CreateOrder/>}/> 
           </Routes>
 
    </BrowserRouter>
