@@ -2,13 +2,21 @@ import { useEffect, useState } from "react";
 import OrderType from "../types/OrderType";
 import axios from "axios";
 import ProductType from "../types/ProductType";
+import { useAuth } from "../context/AuthContext";
 
 function Orders(){
     const[orders,setOrders]=useState<OrderType[]>([]);
+    const{isAuthenticated,jwtToken}=useAuth();
+    const config={
+        headers:{
+            Authorization:`Bearer ${jwtToken}`
+
+        }
+    }
    
     async function loadOrders(){
         try {
-           const apiResponse=await axios.get("http://localhost:8081/order") ;
+           const apiResponse=await axios.get("http://localhost:8081/order",config) ;
            setOrders(apiResponse.data);
         } catch (error) {
             console.log(error);

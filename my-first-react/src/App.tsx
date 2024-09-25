@@ -11,20 +11,29 @@ import Categories from './pages/Categories'
 import Products from './pages/Products'
 import Orders from './pages/Orders'
 import CreateOrder from './pages/CreateOrder'
+import { AuthProvider } from './context/AuthContext'
+import Login from './pages/Login'
+import ProtectedRoute from './components/ProtectedRoute'
 function App() { //parent component
   return(
-   <BrowserRouter>
+   <AuthProvider>
+    <BrowserRouter>
         <Routes>
-          <Route path="/" element= {<Home />}/>
-          <Route path="/Profile" element={<Profile />}/>
-          <Route path="/Settings" element={<Settings/>}/>
-          <Route path="/Categories" element={<Categories/>}/>
-          <Route path='/Products' element={<Products/>}/>
-          <Route path='/Orders' element={<Orders/>}/>
-          <Route path='/OrdersCreate' element={<CreateOrder/>}/> 
-          </Routes>
+          <Route element={<ProtectedRoute/>}>  
+            <Route path="/" element= {<Home />}/>
+            <Route path="/Profile" element={<Profile />}/>
+            <Route path="/Settings" element={<Settings/>}/>
+            <Route path="/Categories" element={<Categories/>}/>
+            <Route path='/Products' element={<Products/>}/>
+            <Route path='/Orders' element={<Orders/>}/>
+            <Route path='/OrdersCreate' element={<CreateOrder/>}/> 
+          </Route>  
+          <Route path='/Login' element={<Login/>}/>
 
-   </BrowserRouter>
+        </Routes>
+
+    </BrowserRouter>
+   </AuthProvider>
   )
 
 }

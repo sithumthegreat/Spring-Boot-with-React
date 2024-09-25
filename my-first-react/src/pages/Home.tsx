@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import Student from "../components/Student";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 function Home() { //parent component
+     
 
     const [counter,setCounter]=useState<number>(0);
     const[userName,setUsername]=useState<String>("");
@@ -16,10 +18,18 @@ function Home() { //parent component
     function handelUsername(event:any){
       setUsername(event.target.value);
     }
+    const {isAuthenticated,login,logout}=useAuth();
+    
     return (
         <>
          <Link to="/Profile">Profile</Link>
-        <h1>WelCome {userName}</h1>
+         <Link to="/Orders">Orders</Link>
+         <Link to="/Products">Products</Link>
+         <Link to="/Categories">Categories</Link>
+
+        <h1>WelCome {userName}!</h1>
+        <button onClick={()=>login("test_token")} className="px-3 py-2 bg-gray-800 text-white">Login</button>
+        {isAuthenticated?<button type="button" onClick={logout}>LogOut</button>:"Not Logged In"};
         <input type="text"  onChange={handelUsername}/>
         <h1>{counter}</h1>
         <button onClick={increase}>Increase Number</button>

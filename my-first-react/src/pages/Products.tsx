@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 import CategoryType from "../types/CategoryType";
 import axios from "axios";
 import ProductType from "../types/ProductType";
+import { useAuth } from "../context/AuthContext";
 
 function Products(){
+    const {isAuthenticated,jwtToken}=useAuth();
+    const config={
+      headers:{
+        Authorization:`Bearer ${jwtToken}`
+      }
+    }
     const[products,setProducts]=useState<ProductType[]>([]);
     const[productName,setProductName]=useState<string>("");
     const[productDesc,setProductDesc]=useState<string>("");
@@ -28,18 +35,21 @@ function Products(){
     }
 
     async function loadProducts(){
-        const apiResponse=await axios.get("http://localhost:8081/product");
+        const apiResponse=await axios.get("http://localhost:8081/product",config);
         setProducts(apiResponse.data);
 
     }
   
     useEffect(function(){
-        loadProducts();
-        loadCategories();
-    },[])
+        if(isAuthenticated){
+            loadProducts();
+            loadCategories();
+        }
+        
+    },[isAuthenticated])
     
     async function loadCategories(){
-        const apiResponse=await axios.get("http://localhost:8081/category");
+        const apiResponse=await axios.get("http://localhost:8081/category",config);
         //console.log(apiResponse);
         setCategories(apiResponse.data);
 
@@ -73,20 +83,20 @@ function Products(){
        try {
         
         if(editMode && editProductId!==null){
-            await axios.put(`http://localhost:8081/product/${editProductId}`, data);
+            await axios.put(`http://localhost:8081/product/${editProductId}`, data,config);
             window.location.reload;
             setEditMode(false);
             setEditProductId(null);
 
         }if(deleteMode){
-            await axios.delete(`http://localhost:8081/product/${editProductId}`);
+            await axios.delete(`http://localhost:8081/product/${editProductId}`,config);
             loadProducts();
             window.location.reload;
             setDeletMode(false);
             setEditProductId(null);
         }
         else{
-            await axios.post("http://localhost:8081/product",data);
+            await axios.post("http://localhost:8081/product",data,config);
         }
         
         loadProducts();
